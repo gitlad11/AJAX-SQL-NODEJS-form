@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8"/>
+<head>
+	<title>SPA</title>
+</head>
+
+<body>
+ <div class='App'>
+ {{> Registration }}
+ {{> UsersList }}
+ </div>
+</body>
+<style>
+	.search-box{
+	position: absolute;
+	top: 100%;
+	left: 0;
+	border: 1px solid #ddd;
+	background: #fff;
+	padding: 10px;
+	z-index: 9999;
+	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.js"></script>
+
+<script type="text/javascript">
+	//css styles via jquery
+	$(document).ready(function() {
+			$.get('/users', (data) =>{
+									//console.log(typeof(data))				
+				var data = JSON.parse(data)
+				var users = []
+					$.each(data, function(key, value){
+						addUser(value)
+					})
+					var addUser = function(user){
+					users.push(user)
+					var FIO = '<h6>' + user.user_name + '</h6>'
+					var number = '<p>' + user.number + '</p>'
+					var date  = '<p>' +user.date.substr(0, 10) + '</p>'
+					var adress = '<p>' + user.adress + '</p>'
+
+					var htmlString = FIO + number + date + adress
+					$.('.users-box').prepend(htmlString)
+				}
+				}
+			
+	$(".App").css({"display": "flex",
+							"justify-content" : "space-between", 
+							"max-height" : "600px", 
+							"width" : "100%"});
+	$(".registration").css({"position" : "relative",
+							"text-align" : "center",
+							"background-color" : "white",
+							"box-shadow" : "0 0 10px rgba(0,0,0,0.7)", 
+							"left" : "0","top" : "30px",
+							 "width" : "500px", 
+							 "transition" : "0.7s ease",
+							 "max-height" : "1000px",
+							 "padding" : "20px",
+							 "margin" : " 10px auto",
+							 });
+	$('.UsersList').css({"width": "50%",
+							"border" : "1px solid grey",
+							"align-items" : "center",
+							"align-content" : "center",
+							"padding" : "4px",
+							"overflowY" : "scroll",
+							"max-height" : "500px",
+							"box-shadow" : "0 0 10px rgba(0,0,0,0.5)",
+							"margin" : "auto"
+							})
+	$(".User-card").css({"border-bottom" : "1px solid grey",
+						"position" : "relative",
+						"display" : "flex",
+						"justify-content" : "space-around",
+						"width" : "100%",
+						"height" : "100px"
+							})
+	$("#form").css({"display" : "flex", 
+					"flex-direction" : "column",
+					"width" : "50%",
+					"margin" : "auto",
+					})
+	$("#form .form-field").css({"height" : "25px",
+							"min-width" : "250px",
+							"display" : "block",
+							"box-shadow" : "0 0 10px rgba(0,0,0,0.5)",
+							"border-bottom" : "1px solid lightgray",
+	 						"margin" : "10px",
+	 						"border-left" : "none",
+	 						"border-top" : "none",
+	 						"text-align" : "center",
+	 						"border-radius" : "6px"})
+	$(".number-field").css({"min-width" : "150px"})
+	$(".submit-button").css({"height" : "35px" , 
+							"background-color":"#00ff1a", 
+							"border-top" : "none",
+							'border-left' : "none",
+							'border-radius' : "3px"
+							})
+	$(".registration").hover(function(){
+		$(".registration").css({"background-color" : "lightgrey"})
+	}, function callback(){
+		$(".registration").css({"background-color" : "white"})
+	})
+		$("form").validate({
+			rules : {
+				name:{
+					required : true,
+				},
+				IIN:{
+					minlength : 9,
+					number : true,
+				},
+				phoneNumber :{
+					minlength : 11,
+					number : true,
+				} 
+			}
+		});
+		var form = $.('#form')
+		form.on('submit' , submitForm)
+		function submitForm(e){
+			console.log('success')
+			e.preventDefault()
+			$.ajax({
+				url : '/signup',
+				type : 'POST',
+				data : form.serialize()
+			}).done(response =>{
+				console.log(response)
+				$('#form input').val('')
+			})
+		}
+	
+
+})
+
+	//////////////////////////////////// TRASH BOX ??????????????????????????????????????
+
+		//var search = $('#search')
+		//var result = $('.search-box')
+
+		//$('.search-btn').on('click', function(e){
+			//e.preventDefault()
+			//$.ajax({
+				//type : 'POST',
+				//url : '/search',
+				//data : {'search': search.val()},
+				//success : function(res){
+					//result.html(res);
+					//if(res != ''){
+						//result.fadeIn();
+					//} else {
+						//result.fadeOut(100);
+					//}
+				//}
+			//})
+		//})
+
+			//for (user of data){
+					//var user = document.createElement('div')
+					//var fio = document.createElement('h6')
+					//var number = document.createElement('p')
+					//var adress = document.createElement('p')
+					//var age = document.createElement('p')
+					//var UserImage = document.createElement('img')
+						//fio.className = 'FIO'
+						//user.className = 'User-card'
+						//number.className = 'number'
+						//age.className = 'Age'
+						//adress.className = 'Adress'
+						//fio.innerHTML = user.user_name
+						//number.innerHTML = user.number
+						//age.innerHTML = user.date
+						//adress.innerHTML = user.adress}
+
+			
+			//data.forEach(object =>{
+					//$('.users-box').add('div').addClass('User-card')
+					//if(object.user_name){
+						//$('.User-card').add('p').addClass('FIO').text(object.user_name)
+					//}
+					//if(object.number){
+						//$('User-card').add('p').addClass('number').text(object.number)
+					//}
+					//if(object.date){
+						//$('User-card').add('p').addClass('Age').text(object.date)
+					//}
+					//if(object.adress){
+						//$('User-card').add('p').addClass('Adress').text(object.adress)
+					//}
+				//})
+				//var user = $('.users-box').append("<div>")
+						
+						//$('.users-box div').append("<h6 class='FIO'>"  + val.user_name + "</h6>")
+						//.append("<p class='number'>" + val.number + "</p>")
+						//.append("<p class='Adress'>" + val.adress + "</p>")
+						//.append("<p class='Age'>" + val.date.substr(0,10) + "</p>")
+						
+											
+						//$('.FIO').prependTo('.User-card')
+						
+												
+						//$('.number').prependTo('.User-card')
+						
+												
+						//$('.Adress').prependTo('.User-card')
+						
+						
+						//$('.Age').prependTo('.User-card')
+	</script>
+</html>
