@@ -17,7 +17,7 @@ var DB_USER = config.DB_USER
 
 //databases
 		//////////////////////////////
-			//phpmyadmin login: L4FZYtMj7L, password : n7JpWZSsOY
+		
 				//////////////////////////////
 var connection = mysql.createConnection({
   host     : `${DB_HOST}`,
